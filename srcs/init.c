@@ -6,63 +6,81 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 18:00:20 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/10 18:02:21 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/11 18:10:19 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	init_argumnets(int ac, char **av, t_arg_info *arg_info)
+void	init_argumnets(int ac, char **av, t_args *args)
 {
 	if (ac < 4 || ac > 5)
 		exit(EXIT_FAILURE);
-	arg_info->number = ft_atoi(av[1]);
-	if (arg_info->number < 0)
+	args->number = ft_atoi(av[1]);
+	if (args->number < 0)
 		exit(EXIT_FAILURE);
-	arg_info->time_to_die = ft_atoi(av[2]);
-	if (arg_info->time_to_die < 0)
+	args->time_to_die = ft_atoi(av[2]);
+	if (args->time_to_die < 0)
 		exit(EXIT_FAILURE);
-	arg_info->time_to_eat = ft_atoi(av[3]);
-	if (arg_info->time_to_eat < 0)
+	args->time_to_eat = ft_atoi(av[3]);
+	if (args->time_to_eat < 0)
 		exit(EXIT_FAILURE);
-	arg_info->time_to_sleep = ft_atoi(av[4]);
-	if (arg_info->time_to_sleep < 0)
+	args->time_to_sleep = ft_atoi(av[4]);
+	if (args->time_to_sleep < 0)
 		exit(EXIT_FAILURE);
 	if (av[5] != NULL)
 	{
-		arg_info->must_eat_times = ft_atoi(av[5]);
-		if (arg_info->must_eat_times < 0)
+		args->must_eat_times = ft_atoi(av[5]);
+		if (args->must_eat_times < 0)
 			exit(EXIT_FAILURE);
+	}
+	else
+		args->must_eat_times = -1;
+}
+
+static void	init_pth_tab(t_info *info)
+{
+	info->pth_tab = (t_pth *)malloc(sizeof(t_pth) * info->args->number);
+	if (info->pth_tab == 0)
+		handle_error("malloc pth_tab");
+	memset(info->pth_tab, 0, sizeof(t_pth) * info->args->number);
+}
+
+static void	init_mutex_tab(t_info *pinfo)
+{
+	int	size;
+	int	i;
+
+	size = pinfo->args->number;
+	pinfo->mutex_tab = malloc(sizeof(pthread_mutex_t) * size);
+	if (pinfo->mutex_tab == 0)
+		handle_error("malloc mutex_tab");
+	i = -1;
+	while (++i < size)
+	{
+		if (pthread_mutex_init(&(pinfo->mutex_tab[i]), NULL))
+			handle_error("init mutex");
 	}
 }
 
-void	init_fork_tab(int **fork_tab, int size)
+static void	init_fork_tab(t_info *pinfo)
 {
-	*fork_tab = (int *)malloc(sizeof(int) * size);
-	if (*fork_tab == 0)
-		handle_error("malloc fork tab");
-	memset(*fork_tab, 0, sizeof(int) * size);
+	int	size;
+
+	size = pinfo->args->number;
+	pinfo->fork_tab = (int *)malloc(sizeof(int) * size);
+	if (pinfo->fork_tab == 0)
+		handle_error("malloc fork_tab");
+	memset(pinfo->fork_tab, 0, sizeof(int) * size);
 }
 
-static void	*start_routine(void *arg)
-{
-	printf("hi %p\n",arg);
-	return (arg);
-}
-
-void	init_philos(t_pth_info **pth_info, int number_of_philos)
+void	init_info(t_args *args, t_info *info)
 {
 	int	i;
 
-	*pth_info = (t_pth_info *)malloc(sizeof(t_pth_info) * number_of_philos);
-	if (*pth_info == 0)
-		handle_error("malloc pth_info");
-	memset(*pth_info, 0, sizeof(t_pth_info) * number_of_philos);
-	i=-1;
-	while (++i < number_of_philos)
-	{
-		((*pth_info)[i]).pth_num = pthread_create(&(((*pth_info)[i]).pth_id), 0, start_routine, 0);
-		if (((*pth_info)[i]).pth_id == 0)
-			handle_error_en(((*pth_info)[i]).pth_num, "pthread_create");
-	}
+	info->args = args;
+	gettimeofday(&(info->starttime), NULL);
+	init_pth_tab(info);
+	init_fork_tab(info);
+	init_mutex_tab(info);
 }

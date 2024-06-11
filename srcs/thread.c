@@ -1,28 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   thread.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/10 18:01:00 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/11 16:51:40 by jeshin           ###   ########.fr       */
+/*   Created: 2024/06/11 17:33:28 by jeshin            #+#    #+#             */
+/*   Updated: 2024/06/11 18:10:33 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	join_pthreads(t_info *info)
+static void	*start_routine(void *ags)
 {
-	void		*status;
-	pthread_t	id;
-	int			i;
+	t_pth		*pth;
+
+	pth = (t_pth *)ags;
+	while (chk_died(pth) == FALSE)
+	{
+		if (try_eat(pth))
+			;
+		if (think(pth))
+			;
+		if (sleep(pth))
+			;
+	}
+	return (0);
+}
+
+void	start(t_info *info)
+{
+	t_pth	*pth;
+	int		i;
 
 	i = -1;
 	while (++i < info->args->number)
 	{
-		id = ((info->pth_tab)[i]).pth_id;
-		if (pthread_join(id, &status))
-			handle_error("pthread join");
+		pth = &((info->pth_tab)[i]);
+		pth->name = i + 1;
+		pth->info = info;
+		if (pthread_create(&(pth->pth_id), 0, start_routine, (void *)(pth)))
+			handle_error("pthread_create");
 	}
 }

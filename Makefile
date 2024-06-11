@@ -1,7 +1,7 @@
 NAME = philo
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+# CFLAGS = -Wall -Wextra -Werror
 DFLAGS = -g -fsanitize=address
 RM = rm
 RMFLAGS = -rf
@@ -17,7 +17,7 @@ $(NAME) : $(OBJS)
 	@$(CC) $(CFLAGS) $^ -o $(NAME)
 	@echo "made $(NAME)"
 d : $(SRCS)
-	@$(CC) $(DFLAGS) $(SRCS)
+	@$(CC) $(DFLAGS) $(SRCS) -o $(NAME)
 clean : 
 	@$(RM) $(RMFLAGS) $(OBJS)
 	@echo cleaned
