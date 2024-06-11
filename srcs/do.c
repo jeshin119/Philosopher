@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:23:54 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/11 18:10:02 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/11 18:46:42 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,14 @@ int	die(t_pth *pth)
 int	chk_died(t_pth *pth)
 {
 	struct timeval	t;
-	long long		cmp;
+	long int		cmp;
 
 	gettimeofday(&t, NULL);
-	cmp = (t.tv_sec - pth->atetime.tv_sec) / 1000 + \
-	(long long)(t.tv_usec - pth->atetime.tv_usec) * 1000;
-	if (cmp > (long long)pth->info->args->time_to_die)
+	cmp = (t.tv_sec - pth->atetime.tv_sec) + \
+	(long int)(t.tv_usec - pth->atetime.tv_usec) * 1000;
+	printf("cmp : %ld\n",cmp);
+	printf("2 : %ld\n",(long int)pth->info->args->time_to_die);
+	if (cmp > (long int)pth->info->args->time_to_die * 1000)
 	{
 		die(pth);
 		return (TURE);

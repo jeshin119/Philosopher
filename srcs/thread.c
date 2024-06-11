@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:33:28 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/11 18:10:33 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/11 18:27:46 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	*start_routine(void *ags)
 			;
 		if (think(pth))
 			;
-		if (sleep(pth))
+		if (_sleep(pth))
 			;
 	}
 	return (0);
