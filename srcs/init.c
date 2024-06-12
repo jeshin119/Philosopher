@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 18:00:20 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/11 18:45:27 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/12 18:24:20 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	init_argumnets(int ac, char **av, t_args *args)
 {
-	
 	if (ac < 5 || ac > 6)
 		exit(EXIT_FAILURE);
 	args->number = ft_atoi(av[1]);

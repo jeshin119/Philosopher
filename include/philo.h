@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:10:05 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/11 18:10:43 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/12 18:28:07 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,20 @@ void	init_info(t_args *args, t_info *pinfo);
 //free.c
 void	join_pthreads(t_info *pinfo);
 //eat.c
+int		eat(int left, int right, t_pth *pth);
 int		try_eat(t_pth *pth);
 //thread.c
 void	start(t_info *info);
-//die.c
-int		chk_died(t_pth *pth);
 //do.c
 int		think(t_pth *pth);
 int		_sleep(t_pth *pth);
+int		die(t_pth *pth);
+//time.c
+int		get_time(t_pth *pth);
+int		get_atetime(t_pth *pth);
+//chk.c
+int		chk_musteat_times(t_pth *pth);
+int		chk_left_right(int *left, int *right, t_pth *pth);
+int		chk_equal(t_pth *pth);
+int		chk_died(t_pth *pth);
 #endif
