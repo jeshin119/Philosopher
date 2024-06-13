@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 18:00:20 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/12 18:24:20 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/13 18:29:32 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	init_argumnets(int ac, char **av, t_args *args)
 {
-	if (ac < 5 || ac > 6)
+	if (ac != 5 && ac != 6)
 		exit(EXIT_FAILURE);
 	args->number = ft_atoi(av[1]);
 	if (args->number < 0)
@@ -68,10 +68,20 @@ static void	init_fork_tab(t_info *pinfo)
 	int	size;
 
 	size = pinfo->args->number;
-	pinfo->fork_tab = (int *)malloc(sizeof(int) * size);
+	pinfo->fork_tab = (t_fork *)malloc(sizeof(t_fork) * size);
 	if (pinfo->fork_tab == 0)
 		handle_error("malloc fork_tab");
-	memset(pinfo->fork_tab, 0, sizeof(int) * size);
+	memset(pinfo->fork_tab, 0, sizeof(t_fork) * size);
+}
+
+void	init_start_time(t_info *info)
+{
+	int	i;
+
+	i = -1;
+	while (++i < info->args->number)
+		gettimeofday(&((info->pth_tab)[i].atetime), NULL);
+	gettimeofday(&(info->starttime), NULL);
 }
 
 void	init_info(t_args *args, t_info *info)
@@ -79,8 +89,8 @@ void	init_info(t_args *args, t_info *info)
 	int	i;
 
 	info->args = args;
-	gettimeofday(&(info->starttime), NULL);
 	init_pth_tab(info);
 	init_fork_tab(info);
 	init_mutex_tab(info);
+	init_start_time(info);
 }

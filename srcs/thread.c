@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:33:28 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/11 18:27:46 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/13 18:08:46 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ static void	*start_routine(void *ags)
 	t_pth		*pth;
 
 	pth = (t_pth *)ags;
-	while (chk_died(pth) == FALSE)
+	while (TRUE)
 	{
-		if (try_eat(pth))
-			;
-		if (think(pth))
-			;
-		if (_sleep(pth))
-			;
+		if (try_eat(pth) == EXIT_FAILURE)
+			break ;
+		if (think(pth) == EXIT_FAILURE)
+			break ;
+		if (_sleep(pth) == EXIT_FAILURE)
+			break ;
 	}
 	return (0);
 }
