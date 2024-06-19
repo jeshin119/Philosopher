@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:10:05 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/13 18:34:15 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/14 16:21:26 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # define TRUE 1
 # define OFF 0
 # define ON 1
+# define DEAD 1
+# define FINE 0
+
 
 # include <unistd.h>
 # include <stdio.h>
@@ -38,7 +41,7 @@ typedef struct s_args
 typedef struct s_fork
 {
 	int	is_locked;
-	int	num;
+	int	who_ate;
 }	t_fork;
 
 typedef struct s_pth	t_pth;
@@ -50,6 +53,8 @@ typedef struct s_info
 	pthread_mutex_t	*mutex_tab;
 	t_pth			*pth_tab;
 	struct timeval	starttime;
+	int				starving;
+	int				enough;
 }	t_info;
 
 struct s_pth
@@ -69,25 +74,21 @@ void	handle_error_en(int en, char *msg);
 void	handle_error(char *msg);
 //init.c
 void	init_argumnets(int ac, char **av, t_args *args);
+//init_info.c
 void	init_info(t_args *args, t_info *pinfo);
 //free.c
 void	join_pthreads(t_info *pinfo);
 //eat.c
 int		try_eat(t_pth *pth);
-int		hold_fork(t_pth *pth, int left, int right);
-int		putdown_fork(t_pth *pth, int left, int right);
 //thread.c
 void	start(t_info *info);
 //do.c
-int		think(t_pth *pth);
 int		_sleep(t_pth *pth);
-int		die(t_pth *pth);
 //time.c
 int		get_time(t_pth *pth);
 int		get_atetime(t_pth *pth);
 //chk.c
 int		chk_musteat_times(t_pth *pth);
-int		set_left_right(int *left, int *right, t_pth *pth);
 int		chk_equal(t_pth *pth, int left, int right);
-int		is_dead(t_pth *pth);
+int		chk_dead(t_pth *pth);
 #endif
