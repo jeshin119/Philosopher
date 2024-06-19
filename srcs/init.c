@@ -1,18 +1,54 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   init_info.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/10 18:00:20 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/14 14:56:14 by jeshin           ###   ########.fr       */
+/*   Created: 2024/06/14 14:55:48 by jeshin            #+#    #+#             */
+/*   Updated: 2024/06/19 19:22:04 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	init_argumnets(int ac, char **av, t_args *args)
+static void	init_pth_tab(t_info *info)
+{
+	info->pth_tab = (t_pth *)malloc(sizeof(t_pth) * info->args->number);
+	if (info->pth_tab == 0)
+		handle_error("malloc pth_tab");
+	memset(info->pth_tab, 0, sizeof(t_pth) * info->args->number);
+}
+
+static void	init_mutex_tab(t_info *pinfo)
+{
+	int	size;
+	int	i;
+
+	size = pinfo->args->number;
+	pinfo->mutex_tab = malloc(sizeof(pthread_mutex_t) * size);
+	if (pinfo->mutex_tab == 0)
+		handle_error("malloc mutex_tab");
+	i = -1;
+	while (++i < size)
+	{
+		if (pthread_mutex_init(&(pinfo->mutex_tab[i]), NULL))
+			handle_error("init mutex");
+	}
+}
+
+static void	init_fork_tab(t_info *pinfo)
+{
+	int	size;
+
+	size = pinfo->args->number;
+	pinfo->fork_tab = (int *)malloc(sizeof(int) * size);
+	if (pinfo->fork_tab == 0)
+		handle_error("malloc fork_tab");
+	memset(pinfo->fork_tab, 0, sizeof(int) * size);
+}
+
+static void	init_argumnets(int ac, char **av, t_args *args)
 {
 	if (ac != 5 && ac != 6)
 		exit(EXIT_FAILURE);
@@ -36,4 +72,17 @@ void	init_argumnets(int ac, char **av, t_args *args)
 	}
 	else
 		args->must_eat_times = -1;
+}
+
+void	init_info(int ac ,char **av, t_args *args, t_info *info)
+{
+	int	i;
+
+	init_argumnets(ac, av, args);
+	info->args = args;
+	init_pth_tab(info);
+	init_fork_tab(info);
+	init_mutex_tab(info);
+	gettimeofday(&(info->starttime), NULL);
+	info->prior = 1;
 }
