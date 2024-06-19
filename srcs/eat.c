@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:24:24 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/19 19:25:55 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/19 22:00:16 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,14 @@ static int	eat(int left, int right, t_pth *pth)
 	curtime = get_time(pth);
 	printf("%ld %d is eating\n", curtime, pth->name);
 	while (get_time(pth) <= curtime + pth->info->args->time_to_eat)
+	{
 		usleep(100);
+		if (chk_dead(pth) == TRUE)
+		{
+			putdown_fork(pth, left, right);
+			return (EXIT_FAILURE);
+		}
+	}
 	pth->atetime = get_time(pth);
 	pth->atecnt++;
 	putdown_fork(pth, left, right);

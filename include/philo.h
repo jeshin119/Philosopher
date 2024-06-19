@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/11 16:10:05 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/19 16:29:51jeshin           ###   ########.fr       */
+/*   Created: 2024/06/19 21:10:17 by jeshin            #+#    #+#             */
+/*   Updated: 2024/06/19 21:34:49 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,11 @@ void	handle_one_philo_case(t_info *info);
 //init.c
 void	init_info(int ac, char **av, t_args *args, t_info *pinfo);
 //free.c
-void	join_pthreads(t_info *pinfo);
 void	free_info(t_info *info);
 //eat.c
 int		try_eat(t_pth *pth);
 //thread.c
-int	start(t_info *info);
+int		start(t_info *info);
 //do.c
 int		_sleep(t_pth *pth);
 //time.c

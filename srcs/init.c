@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_info.c                                        :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:55:48 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/19 19:22:04 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/19 21:10:45 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void	init_argumnets(int ac, char **av, t_args *args)
 		args->must_eat_times = -1;
 }
 
-void	init_info(int ac ,char **av, t_args *args, t_info *info)
+void	init_info(int ac, char **av, t_args *args, t_info *info)
 {
 	int	i;
 

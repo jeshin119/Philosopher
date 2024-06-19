@@ -5,17 +5,52 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/11 17:33:28 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/14 15:44:49by jeshin           ###   ########.fr       */
+/*   Created: 2024/06/19 22:05:59 by jeshin            #+#    #+#             */
+/*   Updated: 2024/06/19 22:06:01 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	think(t_pth *pth)
+static void	monitoring(t_info *info)
 {
-	printf("%ld %d is thinking\n", get_time(pth), pth->name);
+	int	i;
+	int	prev;
 
+	while (TRUE)
+	{
+		i = -1;
+		while (++i < info->args->number)
+		{
+			if (info->args->must_eat_times != -1 && \
+			info->enough >= info->args->number)
+			{
+				info->end = ON;
+				return ;
+			}
+			if ((info->pth_tab)[i].dead)
+			{
+				info->end = ON;
+				return ;
+			}
+			usleep(100);
+		}
+	}
+}
+
+void	join_pthreads(t_info *info)
+{
+	void		*status;
+	pthread_t	id;
+	int			i;
+
+	i = -1;
+	while (++i < info->args->number)
+	{
+		id = ((info->pth_tab)[i]).pth_id;
+		if (pthread_join(id, &status))
+			handle_error("pthread join");
+	}
 }
 
 static void	*start_routine(void *ags)
@@ -33,7 +68,7 @@ static void	*start_routine(void *ags)
 			return (NULL);
 		if (try_eat(pth) == EXIT_SUCCESS)
 		{
-			if (chk_dead(pth) == TRUE)
+			if (pth->dead == ON)
 				return (NULL);
 			_sleep(pth);
 			think = 0;
@@ -44,32 +79,6 @@ static void	*start_routine(void *ags)
 			think = 1;
 		}
 		usleep(100);
-	}
-	return (0);
-}
-
-void	monitoring(t_info *info)
-{
-	int	i;
-	int	prev;
-
-	while (TRUE)
-	{
-		i = -1;
-		while (++i < info->args->number)
-		{
-			if (info->args->must_eat_times != -1 && info->enough >= info->args->number)
-			{
-				info->end = ON;
-				return ;
-			}
-			if ((info->pth_tab)[i].dead)
-			{
-				info->end = ON;
-				return ;
-			}
-			usleep(100);
-		}
 	}
 }
 

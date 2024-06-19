@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 18:23:52 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/19 19:27:56 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/19 22:06:07 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,10 @@ int	chk_eat(t_pth *pth, int left, int right)
 
 int	chk_dead(t_pth *pth)
 {
-	int	curtime;
-	int	atetime;
-	int	dietime;
+	long	curtime;
+	long	dietime;
 
-	if (pth->info->end == ON)
+	if (pth->info->end == ON || pth->dead == ON)
 		return (TRUE);
 	curtime = get_time(pth);
 	dietime = pth->info->args->time_to_die;
