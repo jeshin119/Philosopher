@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:24:24 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/19 22:00:16 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/20 10:57:53 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ static int	hold_fork(t_pth *pth, int left, int right)
 
 static int	putdown_fork(t_pth *pth, int left, int right)
 {
-	(pth->info->fork_tab)[left] = OFF;
 	(pth->info->fork_tab)[right] = OFF;
+	(pth->info->fork_tab)[left] = OFF;
 	pthread_mutex_unlock(&((pth->info->mutex_tab)[right]));
 	pthread_mutex_unlock(&((pth->info->mutex_tab)[left]));
 	return (EXIT_SUCCESS);

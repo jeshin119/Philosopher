@@ -6,28 +6,36 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 22:05:59 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/19 22:06:01 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/20 11:56:55 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
+static int	is_end(t_info *info)
+{
+	pthread_mutex_lock(&(info->lock));
+	if (info->enough >= info->args->number)
+	{
+		info->end = ON;
+		pthread_mutex_unlock(&(info->lock));
+		return (EXIT_FAILURE);
+	}
+	pthread_mutex_unlock(&(info->lock));
+	return (EXIT_FAILURE);
+}
+
 static void	monitoring(t_info *info)
 {
 	int	i;
-	int	prev;
 
 	while (TRUE)
 	{
 		i = -1;
 		while (++i < info->args->number)
 		{
-			if (info->args->must_eat_times != -1 && \
-			info->enough >= info->args->number)
-			{
-				info->end = ON;
+			if (info->args->must_eat_times != -1 && is_end(info))
 				return ;
-			}
 			if ((info->pth_tab)[i].dead)
 			{
 				info->end = ON;
@@ -56,10 +64,8 @@ void	join_pthreads(t_info *info)
 static void	*start_routine(void *ags)
 {
 	t_pth		*pth;
-	int			think;
 
 	pth = (t_pth *)ags;
-	think = 0;
 	while (TRUE)
 	{
 		if (chk_dead(pth) == TRUE)
@@ -71,12 +77,12 @@ static void	*start_routine(void *ags)
 			if (pth->dead == ON)
 				return (NULL);
 			_sleep(pth);
-			think = 0;
+			pth->think = 0;
 		}
-		if (think == 0)
+		if (pth->think == 0)
 		{
 			printf("%ld %d is thinking\n", get_time(pth), pth->name);
-			think = 1;
+			pth->think = 1;
 		}
 		usleep(100);
 	}

@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:10:17 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/19 21:34:49 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/20 11:29:41 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_info
 	t_args			*args;
 	int				*fork_tab;
 	pthread_mutex_t	*mutex_tab;
+	pthread_mutex_t	lock;
 	t_pth			*pth_tab;
 	struct timeval	starttime;
 	int				enough;
@@ -55,6 +56,7 @@ struct s_pth
 	int				name;
 	int				atecnt;
 	int				dead;
+	int				think;
 	t_info			*info;
 	long			atetime;
 };
@@ -62,11 +64,10 @@ struct s_pth
 //ft_atoi.c
 int		ft_atoi(const char *str);
 //err.c
-void	handle_error_en(int en, char *msg);
-void	handle_error(char *msg);
+int		handle_error(char *msg);
 void	handle_one_philo_case(t_info *info);
 //init.c
-void	init_info(int ac, char **av, t_args *args, t_info *pinfo);
+int		init_info(int ac, char **av, t_args *args, t_info *pinfo);
 //free.c
 void	free_info(t_info *info);
 //eat.c

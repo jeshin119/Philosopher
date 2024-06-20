@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 18:23:52 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/19 22:06:07 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/20 10:57:23 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ int	chk_atecnt(t_pth *pth)
 		return (EXIT_SUCCESS);
 	if (pth->atecnt >= pth->info->args->must_eat_times)
 	{
+		pthread_mutex_lock(&(pth->info->lock));
 		pth->info->enough++;
+		pthread_mutex_unlock(&(pth->info->lock));
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
@@ -53,8 +55,15 @@ int	chk_dead(t_pth *pth)
 	long	curtime;
 	long	dietime;
 
-	if (pth->info->end == ON || pth->dead == ON)
+	if (pth->dead == ON)
 		return (TRUE);
+	pthread_mutex_lock(&(pth->info->lock));
+	if (pth->info->end == ON)
+	{
+		pthread_mutex_unlock(&(pth->info->lock));
+		return (TRUE);
+	}
+	pthread_mutex_unlock(&(pth->info->lock));
 	curtime = get_time(pth);
 	dietime = pth->info->args->time_to_die;
 	if (curtime - pth->atetime >= dietime)
