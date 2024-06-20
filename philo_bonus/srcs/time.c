@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   err.c                                              :+:      :+:    :+:   */
+/*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/10 18:00:38 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/20 15:41:01 by jeshin           ###   ########.fr       */
+/*   Created: 2024/06/12 18:14:13 by jeshin            #+#    #+#             */
+/*   Updated: 2024/06/20 15:50:21 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "../include/bphilo.h"
 
-int	handle_error(char *msg)
+long	get_time(t_philo *ph)
 {
-	perror(msg);
-	return (EXIT_FAILURE);
-}
+	struct timeval	t;
+	long			ret;
 
-void	handle_one_philo_case(t_info *info)
-{
-	t_pth	*pth;
-
-	pth = &((info->pth_tab)[0]);
-	pth->name = 1;
-	pth->info = info;
-	printf("%ld %d is thinking\n", get_time(pth), pth->name);
-	usleep(info->args->time_to_die * 1000);
-	printf("%ld %d died\n", get_time(pth), pth->name);
+	gettimeofday(&t, NULL);
+	ret = (t.tv_sec - ph->info->starttime.tv_sec) * 1000 + \
+	(t.tv_usec - ph->info->starttime.tv_usec) / 1000;
+	return (ret);
 }

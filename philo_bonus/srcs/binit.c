@@ -1,42 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   binit.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:55:48 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/20 16:00:33 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/20 15:37:35 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "../include/bphilo.h"
 
-static void	init_pth_tab(t_info *info)
+static void	init_philo_tab(t_info *info)
 {
-	info->pth_tab = (t_pth *)malloc(sizeof(t_pth) * info->args->number);
-	if (info->pth_tab == 0)
-		handle_error("malloc pth_tab");
-	memset(info->pth_tab, 0, sizeof(t_pth) * info->args->number);
-}
-
-static void	init_mutex_tab(t_info *info)
-{
-	int	size;
-	int	i;
-
-	size = info->args->number;
-	info->mutex_tab = malloc(sizeof(pthread_mutex_t) * size);
-	if (info->mutex_tab == 0)
-		handle_error("malloc mutex_tab");
-	i = -1;
-	while (++i < size)
-	{
-		if (pthread_mutex_init(&(info->mutex_tab[i]), NULL))
-			handle_error("init mutex");
-	}
-	if (pthread_mutex_init(&(info->lock), NULL))
-		handle_error("init mutex");
+	info->philo_tab = (int *)malloc(sizeof(int) * info->args->number);
+	if (info->philo_tab == 0)
+		handle_error("malloc philo_tab");
+	memset(info->philo_tab, 0, sizeof(int) * info->args->number);
 }
 
 static void	init_fork_tab(t_info *info)
@@ -50,41 +31,39 @@ static void	init_fork_tab(t_info *info)
 	memset(info->fork_tab, 0, sizeof(int) * size);
 }
 
-static int	init_argumnets(int ac, char **av, t_args *args)
+static void	init_argumnets(int ac, char **av, t_args *args)
 {
 	if (ac != 5 && ac != 6)
-		return (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	args->number = ft_atoi(av[1]);
 	if (args->number < 0)
-		return (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	args->time_to_die = ft_atoi(av[2]);
 	if (args->time_to_die < 0)
-		return (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	args->time_to_eat = ft_atoi(av[3]);
 	if (args->time_to_eat < 0)
-		return (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	args->time_to_sleep = ft_atoi(av[4]);
 	if (args->time_to_sleep < 0)
-		return (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	if (av[5] != NULL)
 	{
 		args->must_eat_times = ft_atoi(av[5]);
 		if (args->must_eat_times < 0)
-			return (EXIT_FAILURE);
+			exit(EXIT_FAILURE);
 	}
 	else
 		args->must_eat_times = -1;
-	return (EXIT_SUCCESS);
 }
 
 int	init_info(int ac, char **av, t_args *args, t_info *info)
 {
-	if (init_argumnets(ac, av, args))
-		return (EXIT_FAILURE);
+	init_argumnets(ac, av, args);
 	info->args = args;
-	init_pth_tab(info);
+	init_philo_tab(info);
 	init_fork_tab(info);
-	init_mutex_tab(info);
+	sem_open("pb",O_CREAT | O)
 	gettimeofday(&(info->starttime), NULL);
 	return (EXIT_SUCCESS);
 }

@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   err.c                                              :+:      :+:    :+:   */
+/*   bmain.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/10 18:00:38 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/20 15:41:01 by jeshin           ###   ########.fr       */
+/*   Created: 2024/06/11 17:26:56 by jeshin            #+#    #+#             */
+/*   Updated: 2024/06/20 12:41:13 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "../include/bphilo.h"
 
-int	handle_error(char *msg)
+int	main(int ac, char **av)
 {
-	perror(msg);
-	return (EXIT_FAILURE);
-}
+	t_info			info;
+	t_args			args;
 
-void	handle_one_philo_case(t_info *info)
-{
-	t_pth	*pth;
-
-	pth = &((info->pth_tab)[0]);
-	pth->name = 1;
-	pth->info = info;
-	printf("%ld %d is thinking\n", get_time(pth), pth->name);
-	usleep(info->args->time_to_die * 1000);
-	printf("%ld %d died\n", get_time(pth), pth->name);
+	if (init_info(ac, av, &args, &info))
+		return (EXIT_FAILURE);
+	start(&info);
+	free_info(&info);
+	return (EXIT_SUCCESS);
 }

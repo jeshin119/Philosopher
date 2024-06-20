@@ -6,11 +6,11 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 18:23:52 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/20 15:38:03 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/20 12:38:24 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "../include/bphilo.h"
 
 int	chk_atecnt(t_pth *pth)
 {
@@ -35,7 +35,9 @@ int	chk_eat(t_pth *pth, int left, int right)
 	if (pth->info->fork_tab[left] == ON | pth->info->fork_tab[right] == ON)
 		return (EXIT_FAILURE);
 	if (pth->name == 1)
+	{
 		tprev = pth->info->pth_tab[pth->info->args->number - 1].atetime;
+	}
 	else
 		tprev = pth->info->pth_tab[pth->name - 2].atetime;
 	tcur = (pth->info->pth_tab[pth->name - 1]).atetime;

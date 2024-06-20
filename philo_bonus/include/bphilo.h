@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   bphilo.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:10:17 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/20 15:29:08 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/20 15:59:13 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <pthread.h>
 # include <errno.h>
 # include <sys/time.h>
+# include <semaphore.h>
 
 typedef struct s_args
 {
@@ -35,30 +36,27 @@ typedef struct s_args
 	int	must_eat_times;
 }	t_args;
 
-typedef struct s_pth	t_pth;
-
 typedef struct s_info
 {
 	t_args			*args;
 	int				*fork_tab;
-	pthread_mutex_t	*mutex_tab;
-	pthread_mutex_t	lock;
-	t_pth			*pth_tab;
+	int				*philo_tab;
 	struct timeval	starttime;
+	long			*timetab;
 	int				enough;
 	int				end;
 }	t_info;
 
-struct s_pth
+typedef struct s_philo
 {
-	pthread_t		pth_id;
+	t_info			*info;
+	pid_t			pid;
 	int				name;
 	int				atecnt;
 	int				dead;
 	int				think;
-	t_info			*info;
 	long			atetime;
-};
+}	t_philo;
 
 //ft_atoi.c
 int		ft_atoi(const char *str);

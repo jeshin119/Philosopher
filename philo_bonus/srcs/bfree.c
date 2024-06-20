@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   err.c                                              :+:      :+:    :+:   */
+/*   bfree.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/10 18:00:38 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/20 15:41:01 by jeshin           ###   ########.fr       */
+/*   Created: 2024/06/10 18:01:00 by jeshin            #+#    #+#             */
+/*   Updated: 2024/06/20 12:41:45 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "../include/bphilo.h"
 
-int	handle_error(char *msg)
+void	free_info(t_info *info)
 {
-	perror(msg);
-	return (EXIT_FAILURE);
-}
+	int	i;
 
-void	handle_one_philo_case(t_info *info)
-{
-	t_pth	*pth;
-
-	pth = &((info->pth_tab)[0]);
-	pth->name = 1;
-	pth->info = info;
-	printf("%ld %d is thinking\n", get_time(pth), pth->name);
-	usleep(info->args->time_to_die * 1000);
-	printf("%ld %d died\n", get_time(pth), pth->name);
+	i = -1;
+	while (++i < info->args->number)
+	{
+		if (pthread_mutex_destroy(&(info->mutex_tab[i])))
+			handle_error("mutex destroy: ");
+	}
+	free(info->mutex_tab);
+	free(info->fork_tab);
+	free(info->pth_tab);
 }
