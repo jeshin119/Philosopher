@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:10:17 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/20 15:59:13 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/20 20:14:19 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,33 +27,26 @@
 # include <sys/time.h>
 # include <semaphore.h>
 
-typedef struct s_args
+typedef struct s_info
 {
 	int	number;
 	int	time_to_die;
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	must_eat_times;
-}	t_args;
-
-typedef struct s_info
-{
-	t_args			*args;
-	int				*fork_tab;
-	int				*philo_tab;
-	struct timeval	starttime;
-	long			*timetab;
+	sem_t			fork;
+	sem_t			endeating;
+	sem_t			whodead;
 	int				enough;
-	int				end;
+	struct timeval	starttime;
 }	t_info;
 
 typedef struct s_philo
 {
-	t_info			*info;
 	pid_t			pid;
+	t_info			*info;
 	int				name;
 	int				atecnt;
-	int				dead;
 	int				think;
 	long			atetime;
 }	t_philo;
@@ -61,22 +54,21 @@ typedef struct s_philo
 //ft_atoi.c
 int		ft_atoi(const char *str);
 //err.c
-int		handle_error(char *msg);
+void	handle_error(char *msg);
 void	handle_one_philo_case(t_info *info);
-//init.c
-int		init_info(int ac, char **av, t_args *args, t_info *pinfo);
+//binit.c
+int		init_info(int ac, char **av, t_info *pinfo);
 //free.c
 void	free_info(t_info *info);
-//eat.c
-int		try_eat(t_pth *pth);
-//thread.c
+//beat.c
+int		eat(t_philo *p);
+//bphilo.c
 int		start(t_info *info);
 //do.c
-int		_sleep(t_pth *pth);
+int	_sleep(t_philo *p);
 //time.c
-long	get_time(t_pth *pth);
+long	get_time(t_philo *p);
 //chk.c
-int		chk_eat(t_pth *pth, int left, int right);
-int		chk_atecnt(t_pth *pth);
-int		chk_dead(t_pth *pth);
+int		chk_atecnt(t_philo *p);
+int		chk_dead(t_philo *p);
 #endif
