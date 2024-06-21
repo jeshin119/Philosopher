@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 19:29:26 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/21 19:30:36 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/21 20:46:40 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,18 @@
 void	endphilos(t_info *info)
 {
 	if (sem_post(info->fork))
-		handle_error("sem post1: ");
-	if (sem_post(info->eatingend))
-		handle_error("sem post2: ");
-	if (sem_post(info->whodead))
-		handle_error("sem post3: ");
+		handle_error("sem close: ");
 	if (sem_close(info->fork))
-		handle_error("sem close1: ");
+		handle_error("sem close: ");
 	if (sem_close(info->eatingend))
-		handle_error("sem close2: ");
+		handle_error("sem close: ");
 	if (sem_close(info->whodead))
-		handle_error("sem close3: ");
+		handle_error("sem close: ");
 	if (sem_unlink("/fork"))
 		handle_error("sem unlink: ");
 	if (sem_unlink("/whodead"))
 		handle_error("sem unlink: ");
 	if (sem_unlink("/eatingend"))
-		handle_error("sem unlink: ");
-	if (sem_unlink("/starting"))
 		handle_error("sem unlink: ");
 	free(info->ptab);
 	exit(EXIT_SUCCESS);
@@ -71,10 +65,8 @@ void	waitphilos(t_info *info)
 	while (++i < info->number)
 	{
 		waitpid(-1, &info->status, 0);
-		// if (WEXITSTATUS(info->status) == EXIT_SUCCESS)
-		// 	info->enough++;
-		// if (info->enough == info->number)
-		// 	endphilos(info);
+		if (WIFEXITED(info->status))
+			info->status = WEXITSTATUS(info->status);
 	}
 }
 

@@ -6,11 +6,17 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:23:54 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/21 19:27:25 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/21 21:04:21 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/bphilo.h"
+
+void	putmsgwithtime(char *msg, long time, int name)
+{
+	//printf 버퍼때문에 리다이렉션 안됨. write을 사용하면 바로 찍힘.
+	write(1,)
+}
 
 int	chk_atecnt(t_philo *p)
 {

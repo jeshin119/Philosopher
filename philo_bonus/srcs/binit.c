@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:55:48 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/21 19:28:29 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/21 20:22:25 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ static void	init_sem(t_info *info)
 	sem_unlink("/fork");
 	sem_unlink("/whodead");
 	sem_unlink("/eatingend");
-	sem_unlink("/starting");
 	info->fork = sem_open("/fork", O_CREAT | O_EXCL, 0644, info->number);
 	if (info->fork == SEM_FAILED)
 		handle_error("sem open: ");

@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:26:56 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/21 18:23:33 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/21 20:59:06 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,6 @@ int	main(int ac, char **av)
 
 	init_info(ac, av, &info);
 	start(&info);
+	free(info.ptab);
 	return (EXIT_SUCCESS);
 }

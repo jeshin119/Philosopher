@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 22:05:59 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/21 19:29:40 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/21 20:23:10 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ static int	eacheating(t_philo *p)
 	{
 		chk_dead(p);
 		chk_atecnt(p);
-		if (eat(p) == EXIT_SUCCESS)
-		{
-			usleep(100);
-			_sleep(p);
-			p->think = 0;
-		}
 		if (p->think == 0)
 		{
 			chk_dead(p);
 			printf("%ld %d is thinking\n", get_time(p), p->name);
 			p->think = 1;
+		}
+		if (eat(p) == EXIT_SUCCESS)
+		{
+			usleep(100);
+			_sleep(p);
+			p->think = 0;
 		}
 	}
 	exit(EXIT_SUCCESS);

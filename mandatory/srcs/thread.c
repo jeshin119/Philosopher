@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 22:05:59 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/20 11:56:55 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/21 21:04:56 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,17 +72,17 @@ static void	*start_routine(void *ags)
 			return (NULL);
 		if (chk_atecnt(pth))
 			return (NULL);
+		if (pth->think == 0)
+		{
+			printf("%ld %d is thinking\n", get_time(pth), pth->name);
+			pth->think = 1;
+		}
 		if (try_eat(pth) == EXIT_SUCCESS)
 		{
 			if (pth->dead == ON)
 				return (NULL);
 			_sleep(pth);
 			pth->think = 0;
-		}
-		if (pth->think == 0)
-		{
-			printf("%ld %d is thinking\n", get_time(pth), pth->name);
-			pth->think = 1;
 		}
 		usleep(100);
 	}
