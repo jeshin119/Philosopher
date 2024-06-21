@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bfree.c                                            :+:      :+:    :+:   */
+/*   btime.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/10 18:01:00 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/20 20:19:13 by jeshin           ###   ########.fr       */
+/*   Created: 2024/06/12 18:14:13 by jeshin            #+#    #+#             */
+/*   Updated: 2024/06/21 19:26:22 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/bphilo.h"
 
-void	free_info(t_info *info)
+long	get_time(t_philo *ph)
 {
-	sem_close(info->fork);
+	struct timeval	t;
+	long			ret;
+
+	gettimeofday(&t, NULL);
+	ret = (t.tv_sec - ph->info->starttime.tv_sec) * 1000 + \
+	(t.tv_usec - ph->info->starttime.tv_usec) / 1000;
+	return (ret);
 }

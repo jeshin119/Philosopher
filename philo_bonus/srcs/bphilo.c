@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 22:05:59 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/20 20:24:20 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/21 19:29:40 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,24 @@ static int	eacheating(t_philo *p)
 		chk_atecnt(p);
 		if (eat(p) == EXIT_SUCCESS)
 		{
+			usleep(100);
 			_sleep(p);
 			p->think = 0;
 		}
 		if (p->think == 0)
 		{
+			chk_dead(p);
 			printf("%ld %d is thinking\n", get_time(p), p->name);
 			p->think = 1;
-			p->prvate = 0;
 		}
 	}
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 }
 
 int	start(t_info *info)
 {
 	int		i;
-	t_philo *ph;
+	t_philo	*p;
 
 	if (info->number == 1)
 	{
@@ -44,17 +45,19 @@ int	start(t_info *info)
 		return (EXIT_SUCCESS);
 	}
 	i = -1;
-	while (++i < info->args->number)
+	while (++i < info->number)
 	{
-		ph = &((info->philo_tab)[i]);
-		ph->name = i + 1;
-		ph->info = info;
-		ph->pid = fork();
-		if (ph->pid == 0)
-			continue ;
-		else if (ph->pid < 0)
+		p = &(info->ptab[i]);
+		p->pid = fork();
+		if (p->pid < 0)
 			handle_error("fork: ");
-		eacheating(ph);
+		if (p->pid != 0)
+			continue ;
+		p->name = i + 1;
+		p->info = info;
+		eacheating(p);
 	}
+	monitoring(info);
+	waitphilos(info);
 	return (EXIT_SUCCESS);
 }
