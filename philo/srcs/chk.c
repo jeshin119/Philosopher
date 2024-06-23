@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 18:23:52 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/20 16:50:54 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/23 17:45:22 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ int	chk_dead(t_pth *pth)
 	long	curtime;
 	long	dietime;
 
-	if (pth->dead == ON)
-		return (TRUE);
 	pthread_mutex_lock(&(pth->info->lock));
 	if (pth->info->end == ON)
 	{
@@ -67,7 +65,7 @@ int	chk_dead(t_pth *pth)
 	if (curtime - pth->atetime >= dietime)
 	{
 		printf("%ld %d died\n", get_time(pth), pth->name);
-		pth->dead = ON;
+		pth->info->end = ON;
 		return (TRUE);
 	}
 	return (FALSE);

@@ -6,26 +6,11 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:23:54 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/21 21:04:21 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/23 15:52:31 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/bphilo.h"
-
-void	putmsgwithtime(char *msg, long time, int name)
-{
-	//printf 버퍼때문에 리다이렉션 안됨. write을 사용하면 바로 찍힘.
-	write(1,)
-}
-
-int	chk_atecnt(t_philo *p)
-{
-	if (p->info->must_eat_times == -1)
-		return (EXIT_SUCCESS);
-	if (p->atecnt >= p->info->must_eat_times)
-		exit(EXIT_SUCCESS);
-	return (EXIT_SUCCESS);
-}
 
 int	chk_dead(t_philo *p)
 {
@@ -37,7 +22,6 @@ int	chk_dead(t_philo *p)
 	dietime = p->info->time_to_die;
 	if (curtime - p->atetime >= dietime)
 	{
-		sem_post(p->info->whodead);
 		printf("%ld %d died\n", get_time(p), p->name);
 		i = -1;
 		while (++i < p->info->number)
@@ -55,6 +39,8 @@ int	eat(t_philo *p)
 {
 	long	curtime;
 
+	if (p->info->must_eat_times != -1 && p->atecnt >= p->info->must_eat_times)
+		return (EXIT_FAILURE);
 	if (sem_wait(p->info->fork))
 		return (EXIT_FAILURE);
 	if (sem_wait(p->info->fork))
@@ -79,6 +65,11 @@ int	_sleep(t_philo *p)
 {
 	int	curtime;
 
+	if (p->atecnt == p->info->must_eat_times)
+	{
+		sem_post(p->info->eatingend);
+		return (EXIT_SUCCESS);
+	}
 	curtime = get_time(p);
 	printf("%d %d is sleeping\n", curtime, p->name);
 	while (get_time(p) <= curtime + p->info->time_to_sleep)
@@ -86,5 +77,12 @@ int	_sleep(t_philo *p)
 		usleep(100);
 		chk_dead(p);
 	}
+	return (EXIT_SUCCESS);
+}
+
+int	_think(t_philo *p)
+{
+	chk_dead(p);
+	printf("%ld %d is thinking\n", get_time(p), p->name);
 	return (EXIT_SUCCESS);
 }

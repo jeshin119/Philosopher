@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:10:17 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/20 15:29:08 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/23 17:39:48 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # define TRUE 1
 # define OFF 0
 # define ON 1
+# define END -1
 
 # include <unistd.h>
 # include <stdio.h>
@@ -54,7 +55,6 @@ struct s_pth
 	pthread_t		pth_id;
 	int				name;
 	int				atecnt;
-	int				dead;
 	int				think;
 	t_info			*info;
 	long			atetime;
@@ -73,8 +73,11 @@ void	free_info(t_info *info);
 int		try_eat(t_pth *pth);
 //thread.c
 int		start(t_info *info);
+void	monitoring(t_info *info);
+void	join_pthreads(t_info *info);
 //do.c
 int		_sleep(t_pth *pth);
+int		think(t_pth *pth);
 //time.c
 long	get_time(t_pth *pth);
 //chk.c

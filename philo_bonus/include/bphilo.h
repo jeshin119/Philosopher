@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:10:17 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/21 19:30:25 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/23 15:52:15 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ typedef struct s_info
 	int				must_eat_times;
 	sem_t			*fork;
 	sem_t			*eatingend;
-	sem_t			*whodead;
 	t_philo			*ptab;
 	int				enough;
 	int				status;
@@ -66,10 +65,10 @@ int		init_info(int ac, char **av, t_info *pinfo);
 //bphilo.c
 int		start(t_info *info);
 //do.c
-int		chk_atecnt(t_philo *p);
 int		chk_dead(t_philo *p);
 int		eat(t_philo *p);
 int		_sleep(t_philo *p);
+int		_think(t_philo *p);
 //time.c
 long	get_time(t_philo *p);
 //monitor.c

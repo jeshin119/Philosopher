@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/11 17:24:24 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/20 10:57:53 by jeshin           ###   ########.fr       */
+/*   Created: 2024/06/23 17:49:16 by jeshin            #+#    #+#             */
+/*   Updated: 2024/06/23 17:50:31 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ static int	eat(int left, int right, t_pth *pth)
 {
 	long	curtime;
 
-	if (pth->info->fork_tab[left] == ON | pth->info->fork_tab[right] == ON)
-		return (EXIT_FAILURE);
 	hold_fork(pth, left, right);
 	curtime = get_time(pth);
 	printf("%ld %d is eating\n", curtime, pth->name);
@@ -59,7 +57,7 @@ static int	eat(int left, int right, t_pth *pth)
 		if (chk_dead(pth) == TRUE)
 		{
 			putdown_fork(pth, left, right);
-			return (EXIT_FAILURE);
+			return (END);
 		}
 	}
 	pth->atetime = get_time(pth);
@@ -76,6 +74,7 @@ int	try_eat(t_pth *pth)
 	set_left_right(&left, &right, pth);
 	if (chk_eat(pth, left, right))
 		return (EXIT_FAILURE);
-	eat(left, right, pth);
+	if (eat(left, right, pth) == END)
+		return (END);
 	return (EXIT_SUCCESS);
 }
