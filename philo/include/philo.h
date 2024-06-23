@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:10:17 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 17:39:48 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/23 18:25:50 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ int		init_info(int ac, char **av, t_args *args, t_info *pinfo);
 //free.c
 void	free_info(t_info *info);
 //eat.c
-int		try_eat(t_pth *pth);
+int		eat(int left, int right, t_pth *pth);
+int		set_left_right(int *left, int *right, t_pth *pth);
 //thread.c
 int		start(t_info *info);
 void	monitoring(t_info *info);

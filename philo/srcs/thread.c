@@ -6,40 +6,19 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 22:05:59 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 17:47:42 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/23 18:53:01 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-static int	is_end(t_info *info)
-{
-	pthread_mutex_lock(&(info->lock));
-	if (info->enough >= info->args->number)
-	{
-		info->end = ON;
-		pthread_mutex_unlock(&(info->lock));
-		return (EXIT_FAILURE);
-	}
-	pthread_mutex_unlock(&(info->lock));
-	return (EXIT_FAILURE);
-}
-
 void	monitoring(t_info *info)
 {
-	int	i;
-
 	while (TRUE)
 	{
-		i = -1;
-		while (++i < info->args->number)
-		{
-			if (info->args->must_eat_times != -1 && is_end(info))
-				return ;
-			if (info->end == ON)
-				return ;
-			usleep(100);
-		}
+		if (info->end == ON)
+			return ;
+		usleep(100);
 	}
 }
 
@@ -61,24 +40,24 @@ void	join_pthreads(t_info *info)
 static void	*start_routine(void *ags)
 {
 	t_pth		*pth;
-	int			ret;
+	int			left;
+	int			right;
 
 	pth = (t_pth *)ags;
+	set_left_right(&left, &right, pth);
 	while (TRUE)
 	{
 		if (chk_dead(pth) == TRUE)
 			return (NULL);
-		if (chk_atecnt(pth))
-			return (NULL);
 		if (pth->think == 0 && think(pth) == EXIT_FAILURE)
 			return (NULL);
-		ret = try_eat(pth);
-		if (ret == EXIT_SUCCESS)
-		{
-			if (_sleep(pth))
-				return (NULL);
-		}
-		else if (ret == END)
+		if (pth->atecnt == pth->info->args->must_eat_times)
+			continue ;
+		if (chk_eat(pth, left, right))
+			continue ;
+		if (eat(left, right, pth) == END)
+			return (NULL);
+		if (_sleep(pth) == END)
 			return (NULL);
 		usleep(100);
 	}

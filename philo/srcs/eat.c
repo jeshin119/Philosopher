@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:49:16 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 17:50:31 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/23 18:25:53 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	putdown_fork(t_pth *pth, int left, int right)
 	return (EXIT_SUCCESS);
 }
 
-static int	set_left_right(int *left, int *right, t_pth *pth)
+int	set_left_right(int *left, int *right, t_pth *pth)
 {
 	*left = pth->name - 1;
 	if (pth->name == pth->info->args->number)
@@ -44,7 +44,7 @@ static int	set_left_right(int *left, int *right, t_pth *pth)
 	return (EXIT_SUCCESS);
 }
 
-static int	eat(int left, int right, t_pth *pth)
+int	eat(int left, int right, t_pth *pth)
 {
 	long	curtime;
 
@@ -62,19 +62,7 @@ static int	eat(int left, int right, t_pth *pth)
 	}
 	pth->atetime = get_time(pth);
 	pth->atecnt++;
+	chk_atecnt(pth);
 	putdown_fork(pth, left, right);
-	return (EXIT_SUCCESS);
-}
-
-int	try_eat(t_pth *pth)
-{
-	int	left;
-	int	right;
-
-	set_left_right(&left, &right, pth);
-	if (chk_eat(pth, left, right))
-		return (EXIT_FAILURE);
-	if (eat(left, right, pth) == END)
-		return (END);
 	return (EXIT_SUCCESS);
 }

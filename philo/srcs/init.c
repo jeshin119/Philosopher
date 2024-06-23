@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/14 14:55:48 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 17:49:40 by jeshin           ###   ########.fr       */
+/*   Created: 2024/06/23 18:52:52 by jeshin            #+#    #+#             */
+/*   Updated: 2024/06/23 18:52:53 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,29 +33,32 @@ static void	init_tab(t_info *info)
 		if (pthread_mutex_init(&(info->mutex_tab[i]), NULL))
 			handle_error("init mutex");
 	}
-	if (pthread_mutex_init(&(info->lock), NULL))
-		handle_error("init mutex");
 }
 
-static void	init_argumnets(char **av, t_args *args)
+static int	init_argumnets(char **av, t_args *args)
 {
 	args->number = ft_atoi(av[1]);
 	args->time_to_die = ft_atoi(av[2]);
 	args->time_to_eat = ft_atoi(av[3]);
 	args->time_to_sleep = ft_atoi(av[4]);
 	if (av[5] != NULL)
+	{
 		args->must_eat_times = ft_atoi(av[5]);
+		if (args->must_eat_times == 0)
+			return (EXIT_FAILURE);
+	}
 	else
 		args->must_eat_times = -1;
+	return (EXIT_SUCCESS);
 }
 
-static void	chk_arguments(int ac, char **av)
+static int	chk_arguments(int ac, char **av)
 {
 	int	i;
 	int	j;
 
 	if (ac != 5 && ac != 6)
-		exit(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	i = 0;
 	while (++i < ac)
 	{
@@ -63,17 +66,24 @@ static void	chk_arguments(int ac, char **av)
 		while (av[i][++j])
 		{
 			if (av[i][j] < '0' || av[i][j] > '9')
-				exit(EXIT_FAILURE);
+				return (EXIT_FAILURE);
 		}
 	}
+	return (EXIT_SUCCESS);
 }
 
 int	init_info(int ac, char **av, t_args *args, t_info *info)
 {
-	chk_arguments(ac, av);
-	init_argumnets(av, args);
+	if (chk_arguments(ac, av))
+		return (EXIT_FAILURE);
+	if (init_argumnets(av, args))
+		return (EXIT_FAILURE);
 	info->args = args;
+	info->enough = 0;
+	info->end = 0;
 	init_tab(info);
+	if (pthread_mutex_init(&(info->lock), NULL))
+		handle_error("init mutex");
 	gettimeofday(&(info->starttime), NULL);
 	return (EXIT_SUCCESS);
 }

@@ -1,13 +1,20 @@
 NAME = philo_bonus
 
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 DFLAGS = -g -fsanitize=address
 RM = rm
 RMFLAGS = -rf
 
 INCLUDE = include
-SRCS = $(wildcard srcs/*.c)
+SRCS = srcs/bdo.c\
+		srcs/berr.c\
+		srcs/bft_atoi.c\
+		srcs/binit.c\
+		srcs/bmain.c\
+		srcs/bmonitor.c\
+		srcs/bphilo.c\
+		srcs/btime.c
 OBJS = $(SRCS:.c=.o)
 
 all : $(NAME)

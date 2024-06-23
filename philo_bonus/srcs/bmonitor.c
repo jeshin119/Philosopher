@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 19:29:26 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 15:42:55 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/23 17:54:45 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	waitphilos(t_info *info)
 
 int	monitoring(t_info *info)
 {
-	pthread_t	monitor_chkdead;
 	pthread_t	monitor_chkenough;
 
 	pthread_create(&(monitor_chkenough), 0, eatenough, (void *)info);

@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 18:23:52 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 17:45:22 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/23 18:49:59 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@ int	chk_atecnt(t_pth *pth)
 {
 	if (pth->info->args->must_eat_times == -1)
 		return (EXIT_SUCCESS);
-	if (pth->atecnt >= pth->info->args->must_eat_times)
+	if (pth->atecnt == pth->info->args->must_eat_times)
 	{
 		pthread_mutex_lock(&(pth->info->lock));
-		pth->info->enough++;
+		(pth->info->enough)++;
+		if (pth->info->enough == pth->info->args->number)
+			pth->info->end = ON;
 		pthread_mutex_unlock(&(pth->info->lock));
 		return (EXIT_FAILURE);
 	}

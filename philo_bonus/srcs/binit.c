@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:55:48 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 15:38:26 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/23 17:56:22 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,18 @@ static void	chk_arguments(int ac, char **av)
 	}
 }
 
-static void	init_arguments(int ac, char **av, t_info *info)
+static void	init_arguments(char **av, t_info *info)
 {
 	info->number = ft_atoi(av[1]);
 	info->time_to_die = ft_atoi(av[2]);
 	info->time_to_eat = ft_atoi(av[3]);
 	info->time_to_sleep = ft_atoi(av[4]);
 	if (av[5] != NULL)
+	{
 		info->must_eat_times = ft_atoi(av[5]);
+		if (info->must_eat_times == 0)
+			exit(EXIT_FAILURE);
+	}
 	else
 		info->must_eat_times = -1;
 }
@@ -66,7 +70,7 @@ static void	init_philos(t_info *info)
 int	init_info(int ac, char **av, t_info *info)
 {
 	chk_arguments(ac, av);
-	init_arguments(ac, av, info);
+	init_arguments(av, info);
 	init_sem(info);
 	init_philos(info);
 	info->enough = 0;
