@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 18:23:52 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 18:49:59 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/24 11:42:05 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,19 @@ int	chk_atecnt(t_pth *pth)
 	{
 		pthread_mutex_lock(&(pth->info->lock));
 		(pth->info->enough)++;
-		if (pth->info->enough == pth->info->args->number)
-			pth->info->end = ON;
+		chk_enough(pth);
 		pthread_mutex_unlock(&(pth->info->lock));
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	chk_enough(t_pth *pth)
+{
+	if (pth->info->enough == pth->info->args->number)
+	{
+		printf("%ld all enough\n", get_time(pth));
+		pth->info->end = ON;
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

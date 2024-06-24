@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:49:16 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 18:25:53 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/23 19:01:02 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	eat(int left, int right, t_pth *pth)
 {
 	long	curtime;
 
+	if (pth->info->fork_tab[left] == ON | pth->info->fork_tab[right] == ON)
+		return (EXIT_FAILURE);
 	hold_fork(pth, left, right);
 	curtime = get_time(pth);
 	printf("%ld %d is eating\n", curtime, pth->name);

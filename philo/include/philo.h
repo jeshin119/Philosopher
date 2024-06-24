@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:10:17 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 18:25:50 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/23 19:06:20 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,5 @@ long	get_time(t_pth *pth);
 int		chk_eat(t_pth *pth, int left, int right);
 int		chk_atecnt(t_pth *pth);
 int		chk_dead(t_pth *pth);
+int		chk_enough(t_pth *pth);
 #endif
