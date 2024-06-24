@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 18:23:52 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/24 11:42:05 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/24 12:27:16 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	chk_eat(t_pth *pth, int left, int right)
 	long	tnext;
 	long	tcur;
 
+	usleep(100);
 	if (pth->info->fork_tab[left] == ON | pth->info->fork_tab[right] == ON)
 		return (EXIT_FAILURE);
 	if (pth->name == 1)
@@ -77,7 +78,9 @@ int	chk_dead(t_pth *pth)
 	if (curtime - pth->atetime >= dietime)
 	{
 		printf("%ld %d died\n", get_time(pth), pth->name);
+		pthread_mutex_lock(&(pth->info->lock));
 		pth->info->end = ON;
+		pthread_mutex_unlock(&(pth->info->lock));
 		return (TRUE);
 	}
 	return (FALSE);

@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 22:05:59 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 19:10:09 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/24 12:28:27 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static void	*start_routine(void *ags)
 	t_pth		*pth;
 	int			left;
 	int			right;
+	int			status;
 
 	pth = (t_pth *)ags;
 	set_left_right(&left, &right, pth);
@@ -51,11 +52,10 @@ static void	*start_routine(void *ags)
 			return (NULL);
 		if (pth->think == 0 && think(pth) == EXIT_FAILURE)
 			return (NULL);
-		if (pth->atecnt == pth->info->args->must_eat_times)
+		status = eat(left, right, pth);
+		if (status == EXIT_FAILURE)
 			continue ;
-		if (chk_eat(pth, left, right))
-			continue ;
-		if (eat(left, right, pth) == END)
+		else if (status == END)
 			return (NULL);
 		if (_sleep(pth) == END)
 			return (NULL);
