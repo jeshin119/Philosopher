@@ -6,25 +6,14 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 22:05:59 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/24 12:28:27 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/24 18:29:57 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	monitoring(t_info *info)
+int	join_pthreads(t_info *info)
 {
-	while (TRUE)
-	{
-		if (info->end == ON)
-			return ;
-		usleep(100);
-	}
-}
-
-void	join_pthreads(t_info *info)
-{
-	void		*status;
 	pthread_t	id;
 	int			i;
 
@@ -32,9 +21,10 @@ void	join_pthreads(t_info *info)
 	while (++i < info->args->number)
 	{
 		id = ((info->pth_tab)[i]).pth_id;
-		if (pthread_join(id, &status))
-			handle_error("pthread join");
+		if (pthread_join(id, NULL))
+			return (handle_error("pthread join"));
 	}
+	return (EXIT_SUCCESS);
 }
 
 static void	*start_routine(void *ags)
@@ -48,16 +38,14 @@ static void	*start_routine(void *ags)
 	set_left_right(&left, &right, pth);
 	while (TRUE)
 	{
-		if (chk_dead(pth) == TRUE)
-			return (NULL);
-		if (pth->think == 0 && think(pth) == EXIT_FAILURE)
+		if (think(pth) == EXIT_FAILURE)
 			return (NULL);
 		status = eat(left, right, pth);
 		if (status == EXIT_FAILURE)
 			continue ;
-		else if (status == END)
+		if (status == END)
 			return (NULL);
-		if (_sleep(pth) == END)
+		if (_sleep(pth) == EXIT_FAILURE)
 			return (NULL);
 		usleep(100);
 	}
@@ -72,7 +60,7 @@ int	start(t_info *info)
 	if (info->args->number == 1)
 	{
 		handle_one_philo_case(info);
-		return (EXIT_SUCCESS);
+		return (EXIT_FAILURE);
 	}
 	i = -1;
 	while (++i < info->args->number)
@@ -81,7 +69,7 @@ int	start(t_info *info)
 		pth->name = i + 1;
 		pth->info = info;
 		if (pthread_create(&(pth->pth_id), 0, start_routine, (void *)(pth)))
-			handle_error("pthread_create");
+			return (handle_error("pthread_create"));
 		usleep(100);
 	}
 	return (EXIT_SUCCESS);

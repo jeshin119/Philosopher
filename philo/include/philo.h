@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:10:17 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/24 12:22:18 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/24 18:28:03 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ typedef struct s_info
 	t_args			*args;
 	int				*fork_tab;
 	pthread_mutex_t	*mutex_tab;
-	pthread_mutex_t	lock;
+	pthread_mutex_t	mend;
+	pthread_mutex_t	mprt;
 	t_pth			*pth_tab;
 	struct timeval	starttime;
 	int				enough;
@@ -74,11 +75,11 @@ int		eat(int left, int right, t_pth *pth);
 int		set_left_right(int *left, int *right, t_pth *pth);
 //thread.c
 int		start(t_info *info);
-void	monitoring(t_info *info);
-void	join_pthreads(t_info *info);
+int		join_pthreads(t_info *info);
 //do.c
 int		_sleep(t_pth *pth);
 int		think(t_pth *pth);
+int		ft_printf(t_pth *pth, int which);
 //time.c
 long	get_time(t_pth *pth);
 //chk.c

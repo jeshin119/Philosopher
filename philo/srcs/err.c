@@ -6,15 +6,28 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 18:00:38 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/21 14:54:36 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/24 17:06:11 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
+size_t	ft_strlen(char *s)
+{
+	size_t	i;
+
+	i = 0;
+	if (s == 0)
+		return (0);
+	while (s[++i])
+		;
+	return (i);
+}
+
 int	handle_error(char *msg)
 {
-	perror(msg);
+	write(2, msg, ft_strlen(msg));
+	write(2, "\n", 1);
 	return (EXIT_FAILURE);
 }
 

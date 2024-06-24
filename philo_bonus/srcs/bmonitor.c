@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 19:29:26 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/24 11:39:49 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/24 13:03:44 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,14 @@ void	waitphilos(t_info *info)
 		{
 			info->status = WEXITSTATUS(info->status);
 			if (info->status != 0)
+			{
+				printf("**************************************\n");
+				i = -1;
+				while (++i < info->number)
+					kill(info->ptab[i].pid, SIGKILL);
 				endphilos(info);
+				printf("**************************************\n");
+			}
 		}
 	}
 }

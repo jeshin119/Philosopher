@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 22:05:59 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/24 11:31:02 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/24 13:04:41 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,8 @@ static int	eacheating(t_philo *p)
 		chk_dead(p);
 		if (p->think == 0)
 		{
-			usleep(100);
 			_think(p);
-			p->think = 1;
 		}
-		usleep(100);
 		if (eat(p) == EXIT_SUCCESS)
 		{
 			usleep(100);
