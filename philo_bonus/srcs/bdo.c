@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:23:54 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 15:52:31 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/24 11:37:01 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ int	eat(t_philo *p)
 {
 	long	curtime;
 
-	if (p->info->must_eat_times != -1 && p->atecnt >= p->info->must_eat_times)
-		return (EXIT_FAILURE);
 	if (sem_wait(p->info->fork))
 		return (EXIT_FAILURE);
 	if (sem_wait(p->info->fork))

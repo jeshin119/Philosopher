@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 19:29:26 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 17:54:45 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/24 11:39:49 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@ void	endphilos(t_info *info)
 
 void	*eatenough(void *ags)
 {
-	t_info	*info;
-	int		i;
+	t_info			*info;
+	struct timeval	t;
+	long			tt;
+	int				i;
 
 	info = (t_info *)ags;
 	i = -1;
@@ -44,9 +46,12 @@ void	*eatenough(void *ags)
 		info->enough++;
 		if (info->enough == info->number)
 		{
+			gettimeofday(&t, NULL);
+			tt = (t.tv_sec - info->starttime.tv_sec) * 1000 + \
+			(t.tv_usec - info->starttime.tv_usec) / 1000;
+			printf("%ld all enough\n", tt);
 			while (++i < info->number)
 				kill(info->ptab[i].pid, SIGKILL);
-			printf("all enough\n");
 			endphilos(info);
 		}
 	}
