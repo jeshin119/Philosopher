@@ -8,13 +8,13 @@ RMFLAGS = -rf
 
 INCLUDE = include
 SRCS = srcs/bdo.c\
-		srcs/berr.c\
 		srcs/bft_atoi.c\
 		srcs/binit.c\
 		srcs/bmain.c\
 		srcs/bmonitor.c\
 		srcs/bphilo.c\
-		srcs/btime.c
+		srcs/butils.c\
+		srcs/bwait.c
 OBJS = $(SRCS:.c=.o)
 
 all : $(NAME)

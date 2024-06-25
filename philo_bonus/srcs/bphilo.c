@@ -6,27 +6,19 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 22:05:59 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/24 13:04:41 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/25 15:46:11 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/bphilo.h"
 
-static int	eacheating(t_philo *p)
+static int	starteating(t_philo *p)
 {
 	while (TRUE)
 	{
-		chk_dead(p);
-		if (p->think == 0)
-		{
-			_think(p);
-		}
+		_think(p);
 		if (eat(p) == EXIT_SUCCESS)
-		{
-			usleep(100);
 			_sleep(p);
-			p->think = 0;
-		}
 	}
 	exit(EXIT_SUCCESS);
 }
@@ -52,7 +44,7 @@ int	start(t_info *info)
 			continue ;
 		p->name = i + 1;
 		p->info = info;
-		eacheating(p);
+		starteating(p);
 	}
 	return (EXIT_SUCCESS);
 }

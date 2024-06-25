@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:55:48 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/23 17:56:22 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/25 15:41:53 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,32 @@ static void	init_arguments(char **av, t_info *info)
 	info->time_to_die = ft_atoi(av[2]);
 	info->time_to_eat = ft_atoi(av[3]);
 	info->time_to_sleep = ft_atoi(av[4]);
+	info->must_eat_times = -1;
 	if (av[5] != NULL)
 	{
 		info->must_eat_times = ft_atoi(av[5]);
 		if (info->must_eat_times == 0)
 			exit(EXIT_FAILURE);
 	}
-	else
-		info->must_eat_times = -1;
 }
 
 static void	init_sem(t_info *info)
 {
 	sem_unlink("/fork");
-	sem_unlink("/eatingend");
+	sem_unlink("/end");
+	sem_unlink("/prt");
+	sem_unlink("/enough");
 	info->fork = sem_open("/fork", O_CREAT | O_EXCL, 0644, info->number);
 	if (info->fork == SEM_FAILED)
 		handle_error("sem open: ");
-	info->eatingend = sem_open("/eatingend", O_CREAT | O_EXCL, 0644, 0);
-	if (info->eatingend == SEM_FAILED)
+	info->end = sem_open("/end", O_CREAT | O_EXCL, 0644, 0);
+	if (info->end == SEM_FAILED)
+		handle_error("sem open: ");
+	info->enough = sem_open("/enough", O_CREAT | O_EXCL, 0644, 0);
+	if (info->enough == SEM_FAILED)
+		handle_error("sem open: ");
+	info->prt = sem_open("/prt", O_CREAT | O_EXCL, 0644, 1);
+	if (info->end == SEM_FAILED)
 		handle_error("sem open: ");
 }
 
@@ -73,8 +80,7 @@ int	init_info(int ac, char **av, t_info *info)
 	init_arguments(av, info);
 	init_sem(info);
 	init_philos(info);
-	info->enough = 0;
-	info->status = 0;
+	info->nenough = 0;
 	gettimeofday(&(info->starttime), NULL);
 	return (EXIT_SUCCESS);
 }
