@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:10:17 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/25 12:40:10 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/25 18:28:09 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,28 +63,25 @@ struct s_pth
 
 //ft_atoi.c
 int		ft_atoi(const char *str);
-//err.c
+//utils.c
 int		handle_error(char *msg);
 void	handle_one_philo_case(t_info *info);
+int		free_info(t_info *info);
+long	get_time(t_pth *pth);
 //init.c
 int		init_info(int ac, char **av, t_args *args, t_info *pinfo);
-//free.c
-void	free_info(t_info *info);
 //eat.c
-int		eat(int left, int right, t_pth *pth);
 int		set_left_right(int *left, int *right, t_pth *pth);
+int		eat(int left, int right, t_pth *pth);
 //thread.c
 int		start(t_info *info);
 int		join_pthreads(t_info *info);
 //do.c
 int		_sleep(t_pth *pth);
 int		think(t_pth *pth);
-int		ft_printf(t_pth *pth, int which);
-//time.c
-long	get_time(t_pth *pth);
+void	ft_printf(t_pth *pth, int which);
 //chk.c
 int		chk_eat(t_pth *pth, int left, int right);
 int		chk_atecnt(t_pth *pth);
 int		chk_dead(t_pth *pth);
-int		chk_enough(t_pth *pth);
 #endif

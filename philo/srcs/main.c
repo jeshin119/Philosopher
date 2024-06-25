@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:26:56 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/24 18:25:26 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/25 18:23:51 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	main(int ac, char **av)
 		free_info(&info);
 		return (EXIT_FAILURE);
 	}
-	free_info(&info);
+	if (free_info(&info))
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

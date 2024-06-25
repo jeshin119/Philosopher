@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 22:05:59 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/24 18:29:57 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/25 18:10:40 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	join_pthreads(t_info *info)
 		id = ((info->pth_tab)[i]).pth_id;
 		if (pthread_join(id, NULL))
 			return (handle_error("pthread join"));
+		usleep(100);
 	}
 	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:23:54 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/24 19:43:36 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/25 18:15:10 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,14 @@ int	think(t_pth *pth)
 	return (EXIT_SUCCESS);
 }
 
-int	ft_printf(t_pth *pth, int which)
+void	ft_printf(t_pth *pth, int which)
 {
 	pthread_mutex_lock(&(pth->info->mprt));
 	if (pth->info->end == ON)
-		return (EXIT_FAILURE);
+	{
+		pthread_mutex_unlock(&(pth->info->mprt));
+		return ;
+	}
 	if (which == 0)
 		printf("%ld %d is thinking\n", get_time(pth), pth->name);
 	else if (which == 1)
@@ -67,5 +70,4 @@ int	ft_printf(t_pth *pth, int which)
 		pth->info->end = ON;
 	}
 	pthread_mutex_unlock(&(pth->info->mprt));
-	return (EXIT_SUCCESS);
 }

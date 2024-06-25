@@ -10,13 +10,11 @@ INCLUDE = include
 SRCS = srcs/chk.c\
 		srcs/do.c\
 		srcs/eat.c\
-		srcs/err.c\
-		srcs/free.c\
+		srcs/utils.c\
 		srcs/ft_atoi.c\
 		srcs/init.c\
 		srcs/main.c\
-		srcs/thread.c\
-		srcs/time.c
+		srcs/thread.c
 OBJS = $(SRCS:.c=.o)
 
 all : $(NAME)
