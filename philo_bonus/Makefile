@@ -2,7 +2,7 @@ NAME = philo_bonus
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-DFLAGS = -g -fsanitize=address
+DFLAGS = -g -fsanitize=thread
 RM = rm
 RMFLAGS = -rf
 

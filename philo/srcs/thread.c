@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 22:05:59 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/25 18:10:40 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/27 20:36:10 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ static void	*start_routine(void *ags)
 			return (NULL);
 		if (_sleep(pth) == EXIT_FAILURE)
 			return (NULL);
-		usleep(100);
 	}
 	return (NULL);
 }

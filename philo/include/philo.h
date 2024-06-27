@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:10:17 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/25 18:28:09 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/27 20:48:45 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int		join_pthreads(t_info *info);
 //do.c
 int		_sleep(t_pth *pth);
 int		think(t_pth *pth);
-void	ft_printf(t_pth *pth, int which);
+int		prt_status(t_pth *pth, int which);
 //chk.c
 int		chk_eat(t_pth *pth, int left, int right);
 int		chk_atecnt(t_pth *pth);
