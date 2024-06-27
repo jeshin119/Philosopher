@@ -6,7 +6,7 @@
 /*   By: jeshin <jeshin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:49:16 by jeshin            #+#    #+#             */
-/*   Updated: 2024/06/25 18:28:01 by jeshin           ###   ########.fr       */
+/*   Updated: 2024/06/27 15:35:11 by jeshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@ static int	hold_fork(t_pth *pth, int left, int right)
 {
 	if (pthread_mutex_lock(&(pth->info->mutex_tab[left])))
 		return (handle_error("mutex lock: "));
+	ft_printf(pth, 1);
+	(pth->info->fork_tab)[left] = ON;
 	if (pthread_mutex_lock(&(pth->info->mutex_tab[right])))
 		return (handle_error("mutex lock: "));
 	ft_printf(pth, 1);
-	(pth->info->fork_tab)[left] = ON;
-	ft_printf(pth, 1);
 	(pth->info->fork_tab)[right] = ON;
-	pthread_mutex_unlock(&((pth->info->mutex_tab)[right]));
 	pthread_mutex_unlock(&((pth->info->mutex_tab)[left]));
+	pthread_mutex_unlock(&((pth->info->mutex_tab)[right]));
 	return (EXIT_SUCCESS);
 }
 
@@ -31,12 +31,12 @@ static int	putdown_fork(t_pth *pth, int left, int right)
 {
 	if (pthread_mutex_lock(&(pth->info->mutex_tab[left])))
 		return (handle_error("mutex lock: "));
+	(pth->info->fork_tab)[left] = OFF;
 	if (pthread_mutex_lock(&(pth->info->mutex_tab[right])))
 		return (handle_error("mutex lock: "));
 	(pth->info->fork_tab)[right] = OFF;
-	(pth->info->fork_tab)[left] = OFF;
-	pthread_mutex_unlock(&((pth->info->mutex_tab)[right]));
 	pthread_mutex_unlock(&((pth->info->mutex_tab)[left]));
+	pthread_mutex_unlock(&((pth->info->mutex_tab)[right]));
 	return (EXIT_SUCCESS);
 }
 
