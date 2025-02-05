@@ -1,12 +1,68 @@
 # Study
 program vs process vs thread ([https://en.wikipedia.org/wiki/Thread_(computing)#](https://en.wikipedia.org/wiki/Thread_(computing)#))
 
+
 ## Process and Thread
 
 프로세스란 프로그램의 실행이다. 스레드란 프로세스 내 개별 흐름이다.
 
 한 프로그램은 여러 스레드를 가질 수 있다. 각 스레드는 data와 heap 메모리를 공유하지만 각각의 stack 메모리를 가진다.
 
+
+## How Do Threads Work?
+
+### Process Management
+
+1. **Process Control Block (PCB)**:
+    - **Definition**: A data structure used by the operating system to store information about a process.
+    - **Contents**: Includes process ID, process state, CPU registers, memory limits, list of open files, and scheduling information.
+2. **Process Lifecycle**:
+    - **States**: Processes can be in various states such as new, ready, running, waiting (blocked), and terminated.
+    - **Transitions**: The operating system manages transitions between these states based on events like process creation, scheduling, I/O requests, and process termination.
+3. **Scheduling**:
+    - **Scheduler**: The component responsible for deciding which process runs at any given time.
+    - **Algorithms**: Uses algorithms like First-Come, First-Served (FCFS), Round Robin, Priority Scheduling, and Multilevel Queue Scheduling to make decisions.
+4. **Context Switching**:
+    - **Definition**: The process of saving the state of a currently running process and loading the state of the next process to be executed.
+    - **Overhead**: Context switching involves overhead, including saving and restoring CPU registers, memory maps, and updating the PCB.
+5. **Inter-Process Communication (IPC)**:
+    - **Mechanisms**: Includes pipes, message queues, shared memory, and sockets to allow processes to communicate and synchronize with each other.
+    - **Purpose**: Facilitates data exchange and coordination between processes.
+
+### Thread Management
+
+1. **Thread Control Block (TCB)**:
+    - **Definition**: A data structure used by the operating system to store information about a thread.
+    - **Contents**: Includes thread ID, thread state, CPU registers, stack pointer, scheduling information, and thread-specific data.
+2. **Thread Lifecycle**:
+    - **States**: Threads, like processes, can be in states such as new, ready, running, waiting (blocked), and terminated.
+    - **Transitions**: Managed by the operating system to ensure smooth execution and resource sharing among threads.
+3. **Thread Scheduling**:
+    - **Kernel-Level Threads**: Managed directly by the operating system kernel. The scheduler treats them similarly to processes.
+    - **User-Level Threads**: Managed by a user-level thread library. The operating system kernel is unaware of them, and scheduling is done by the thread library.
+4. **Synchronization**:
+    - **Mechanisms**: Includes mutexes, semaphores, condition variables, and spinlocks to manage access to shared resources and prevent race conditions.
+    - **Purpose**: Ensures that threads do not interfere with each other when accessing shared resources.
+5. **Multithreading Models**:
+    - **Many-to-One**: Multiple user-level threads map to a single kernel thread. This model can lead to inefficiencies due to the lack of concurrency.
+    - **One-to-One**: Each user-level thread maps to a kernel thread, providing true concurrency but with higher overhead.
+    - **Many-to-Many**: Multiple user-level threads map to multiple kernel threads, balancing concurrency and resource usage.
+
+### Key Components and Mechanisms
+
+1. **CPU Scheduling**:
+    - **Purpose**: Allocates CPU time to processes and threads based on scheduling policies and algorithms.
+    - **Types**: Preemptive (can interrupt running tasks) and non-preemptive (tasks run to completion or voluntarily yield).
+2. **Memory Management**:
+    - **Allocation**: Processes have separate address spaces; threads share the process's address space.
+    - **Protection**: Ensures that processes do not interfere with each other’s memory, while threads within a process must use synchronization to avoid conflicts.
+3. **Resource Allocation**:
+    - **Processes**: Allocate resources like memory, file handles, and I/O devices independently.
+    - **Threads**: Share resources of the parent process but need synchronization to manage concurrent access.
+
+### Summary
+
+Operating systems use sophisticated mechanisms to manage processes and threads efficiently. Processes are handled with isolation and protection in mind, while threads focus on sharing resources within a single process. Both processes and threads are scheduled based on various algorithms to ensure fair and efficient use of CPU time. Synchronization mechanisms are crucial to manage shared resources and prevent conflicts, ensuring smooth and reliable operation of concurrent programs.
 
 ## The difference between processes and threads
 Key Differences Summarized
@@ -276,3 +332,261 @@ pthred(7)와 같이 포괄적인 개념들을 정리한 내용도 있다.
 ## errno는 자동으로 설정되는지?
 
 system call 이나 function이 실패하면 자동으로 설정됨. 성공하면 갱신되지 않기 때문에 주의필요.
+
+## allowed functions:
+
+pthread 관련함수. gettimeofday, usleep
+
+---
+
+<aside>
+💡 pthread_create
+
+</aside>
+
+새로운 스레드를 생성하는 함수. 
+
+```jsx
+#include <pthread.h>
+
+int  pthread_create(pthread_t  *  thread, pthread_attr_t * attr, \
+void * (*start_routine)(void *), void * arg);
+```
+
+인자로 pthread_t, attr, start,routine, arg를 받으며 성공시 0을 실패시 0이 아닌 errno값을 반환한다. thread속성을 변경해서 attr의 값을 인자로 넣을 수 있다. 스레드 생성시 호출함수를 인자로 넘길 수 있고 인자로서 void *arg을 인자로 받는다.
+
+reference : https://www.joinc.co.kr/w/man/3/pthread_create
+
+<aside>
+💡 pthread_detach
+
+</aside>
+
+```jsx
+#include <pthread.h>
+
+int pthread_detach(pthread_t th);
+```
+
+스레드 th를 메인스레드로부터 분리시킨다. 분리된 스레드는 종료시 자원을 되돌려줄 것(free)을 보장한다. detach상태가 아닐경우, pthread_join을 사용하지 않으면 자원을 되돌려주지 않는다.
+
+이 함수를 사용하지 않고 스레드 생성시 attr 속성에 detachable속성을 넣을 수 있다.
+
+referencd : https://www.joinc.co.kr/w/man/3/pthread_detach
+
+<aside>
+💡 pthread_join
+
+</aside>
+
+```jsx
+#include 
+
+int pthread_join(pthread_t th, void **thread_return);
+```
+
+th 스레드가 종료되는 것을 기다린다. 종료된다는 것은 pthread_exit로 종료되거나 return 되는 경우를 말한다. 스레드를 릭없이 종료시키려면 join함수나 detach함수를 호출해야 한다. 만약 joinable상태에서 join함수를 만나지 못하면 메모리 릭이 날 것이다.
+
+join의 두번째 인자인 thread_return이란?
+
+해당 스레드 생성시 반환값을 받아 사용할 수 있다. 다음 예에서는 자식 스레드를 기다리고 종료될 때 반환한 값을 받아 스레드의 이름을 출력하게 했다.
+
+```jsx
+void	join_pthreads(t_pth_info *pinfo)
+{
+	void		*status;
+	pthread_t	id;
+	int			i;
+	int			en;
+
+	i = -1;
+	while (++i < pinfo->args->number)
+	{
+		id = ((pinfo->pth_tab)[i]).pth_id;
+		en = pthread_join(id, &status);
+		if (en != 0)
+			handle_error_en(en, "pthread join");
+		printf("pth status : %d\n",((t_pth *)status)->name);
+	}
+}
+```
+
+reference : https://www.joinc.co.kr/w/man/3/pthread_join
+
+<aside>
+💡 pthread_join vs pthread_detach
+
+</aside>
+
+언제 join을 사용하고 detach를 사용해야하는지?
+
+부모 스레드와 독립적으로 자식스레드를 사용하고 종료시키려면 detach를 사용한다.
+
+어떤 스레드의 종료상태나 어떤 스레드를 기다려야 한다면 join을 사용한다.
+
+---
+
+<aside>
+💡 pthread_mutex_init
+
+</aside>
+
+<aside>
+💡 pthread_mutex_destroy
+
+</aside>
+
+<aside>
+💡 pthread_mutex_lock
+
+</aside>
+
+<aside>
+💡 pthread_mutex_unlock
+
+</aside>
+
+mutex는 변수의 메모리접근을 막는게 아니라 코드영역에 lock을 건다.
+
+예를 들어 두 스레드가 있고 한 스레드에서 특정 함수에서 공유자원을 사용하기 전에 look을 건다면 다른 스레드는 사용할 수 없을까?
+
+lock된 영역이 아니라면 다른 스레드는 그 공유자원을 사용할 수 있다.
+
+```jsx
+#include "../include/philo.h"
+//두 스레드
+pthread_t pth1;
+pthread_t pth2;
+//공유자원
+int	src=10;
+//뮤텍스
+pthread_mutex_t m;
+
+void	*f1(void *arg){
+	//lock을 걸고 코드영역에
+	pthread_mutex_init(&m,NULL);
+	pthread_mutex_lock(&m);
+	printf("f1 start : \n");
+	printf("org src : %d\n",src);
+	//값을 변화시킨다
+	src = 100;
+	printf("chg src : %d\n",src);
+	printf("f1 end : \n");
+	//unlock을 하지 않는다.
+	// pthread_mutex_unlock(&m);
+	return 0;
+}
+void	*f2(void *arg){
+	//f2는 f1이 lock된 상태임에도 불구하고 잘 동작한다.
+	printf("f2 start : \n");
+	printf("org src : %d \n",src);
+	src = -10;
+	printf("chg src : %d\n",src);
+	printf("f2 end : \n");
+	return 0;
+}
+int main(){
+	//두 스레드를 생성 
+	pthread_create(&pth1,NULL,f1,&src);
+	pthread_create(&pth2,NULL,f2,&src);
+	//만약 start routine을 f1으로 했다면 f1에서 unlock을 하지 않았다면 무한 대기(spinlock)가 발생한다.
+	// pthread_create(&pth2,NULL,f1,&src);
+	//두 스레드를 기다림
+	pthread_join(pth1,NULL);
+	pthread_join(pth2,NULL);
+	//
+	printf("lat src : %d\n",src);
+}
+```
+
+mutex reference : https://www.joinc.co.kr/w/Site/Thread/Beginning/Mutex
+
+## usleep, sleep?
+
+sleep : 매개변수로 초를 받는다. 성공하면 0을 반환, 시그널이 와서 중단될 경우와 같이 실패하면 입력받은 값을 반환한다.
+
+sleep은 second, usleep은 micro, nanosleep은 nano 단위로 쉰다.
+
+<aside>
+💡 usleep 이 과제에서 필요한 이유?
+
+</aside>
+
+multitrheading 프로그램에서 어떤 조건이 만족되면 특정작업을 실행시키려고 한다. 이 때 while문에서 조건을 계속 확인하고 만족하면 특정작업을 실행하도록 작성할 수 있다. busy waiting에서 usleep을 사용하면 cpu의 점유를 줄여 비용을 적게 할 수 있다. 그리고 데이터가 공유자원에 대해 데이터가 갱신되지 않고 루프를 빠르게 도는 문제가 생길 수 있다. 
+
+- **메모리 가시성 (Memory Visibility)**
+    - 한 스레드가 공유 자원에 쓰기를 완료했다고 해서 다른 스레드가 즉시 그 변경 사항을 볼 수 있는 것은 아닙니다. 각 스레드는 CPU 캐시를 사용하며, 쓰기 작업이 캐시에서 메모리로 즉시 반영되지 않을 수 있습니다.
+    - 메모리 가시성 문제를 해결하기 위해 메모리 배리어(memory barriers)나 뮤텍스, 조건 변수 등을 사용하여 동기화를 보장할 수 있습니다.
+- **동기화 문제**
+    - 두 스레드 간의 동기화가 적절히 이루어지지 않으면, 쓰기 작업이 완료된 시점과 이를 확인하는 시점 간에 불일치가 발생할 수 있습니다.
+    - 동기화 기법을 사용하면 한 스레드가 쓰기 작업을 완료한 후 다른 스레드가 이를 확인할 수 있도록 보장할 수 있습니다.
+
+**대기 상태 제어**: `usleep`은 주어진 시간 동안 스레드를 실행하지 않고 대기시키는 역할을 합니다. 이는 스레드가 너무 빨리 실행되어 다른 스레드가 필요한 공유 자원에 접근하기 전에 기다리는 시간을 제어할 때 유용할 수 있습니다.
+
+### usleep을 사용하지 않고 동기화문제를 해결하는 방법
+
+multithreading에서 mutex와 condtion을 사용하여 해결할 수 있다.
+
+```jsx
+#include <pthread.h>
+#include <stdio.h>
+#include <unistd.h>
+
+pthread_mutex_t lock;
+pthread_cond_t cond;
+int shared_resource = 0;
+int write_done = 0;
+
+void* writer_thread(void* arg) {
+    pthread_mutex_lock(&lock);
+    // 공유 자원 쓰기 작업
+    shared_resource = 42;
+    write_done = 1;
+    pthread_cond_signal(&cond);
+    pthread_mutex_unlock(&lock);
+    return NULL;
+}
+
+void* checker_thread(void* arg) {
+    pthread_mutex_lock(&lock);
+    while (!write_done) {
+        pthread_cond_wait(&cond, &lock);
+    }
+    // 공유 자원 확인 작업
+    printf("Shared resource value: %d\n", shared_resource);
+    pthread_mutex_unlock(&lock);
+    return NULL;
+}
+
+int main() {
+    pthread_t writer, checker;
+
+    pthread_mutex_init(&lock, NULL);
+    pthread_cond_init(&cond, NULL);
+
+    pthread_create(&writer, NULL, writer_thread, NULL);
+    pthread_create(&checker, NULL, checker_thread, NULL);
+
+    pthread_join(writer, NULL);
+    pthread_join(checker, NULL);
+
+    pthread_mutex_destroy(&lock);
+    pthread_cond_destroy(&cond);
+
+    return 0;
+}
+
+```
+
+과제에서 pthread_cond 함수들을 사용할 수 없기 때문에 usleep을 사용해야 한다.
+
+<aside>
+💡 sleep 과 usleep이 어떻게 작동되는건지?
+
+</aside>
+
+운영체제가 process를 sleepstate로 돌려놓게 한다. process가 sleep함수를 인식하고 처리하는게 아니다. usleep은 최소한의 시간이 지나면 스레드를 다시 대기열에 올려 놓는 기능을 하는 것이지 정확히 해당시간이 지나면 깨어나는 기능을 하는게 아니다.
+
+ulssep은 select함수로 내부적으로 구현되어있다고 한다.
+
+
